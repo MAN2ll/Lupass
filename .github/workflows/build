@@ -3,7 +3,7 @@ name: Build APK
 on:
   push:
     branches: [ main, master ]
-  workflow_dispatch:  # Позволяет запускать сборку вручную
+  workflow_dispatch:
 
 jobs:
   build:
@@ -31,3 +31,19 @@ jobs:
           name: lupass-apk
           path: app/build/outputs/apk/debug/app-debug.apk
           retention-days: 7
+
+      # ✅ ЭТОТ ШАГ СОЗДАЁТ RELEASE
+      - name: Create Release with APK
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v1.0
+          name: "Lupass — скачать APK"
+          body: |
+            ## ⬇️ Нажми на app-debug.apk ниже чтобы скачать
+            
+            **Версия:** 1.0  
+            **Собрано:** ${{ github.event.head_commit.timestamp }}
+          files: app/build/outputs/apk/debug/app-debug.apk
+          make_latest: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
