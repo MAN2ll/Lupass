@@ -1,0 +1,2 @@
+-keep class com.securevault.** { *; }
+-keepattributes *Annotation*
