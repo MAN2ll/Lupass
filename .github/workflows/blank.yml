@@ -25,6 +25,14 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
+      # ✅ ЭТОТ ШАГ СКАЧИВАЕТ ОТСУТСТВУЮЩИЙ gradle-wrapper.jar
+      - name: Download Gradle Wrapper JAR
+        run: |
+          mkdir -p gradle/wrapper
+          curl -fsSL \
+            "https://raw.githubusercontent.com/gradle/gradle/refs/tags/v8.10.2/gradle/wrapper/gradle-wrapper.jar" \
+            -o gradle/wrapper/gradle-wrapper.jar
+
       - name: Make gradlew executable
         run: chmod +x gradlew
 
@@ -44,7 +52,7 @@ jobs:
           tag_name: v1.0
           name: "Lupass — скачать APK"
           body: |
-            ## ️ Нажми на app-debug.apk ниже чтобы скачать
+            ## ⬇️ Нажми на app-debug.apk ниже чтобы скачать
             
             **Версия:** 1.0
           files: app/build/outputs/apk/debug/app-debug.apk
