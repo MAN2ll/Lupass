@@ -5,9 +5,11 @@ plugins {
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
 }
+
 android {
     namespace = "com.securevault"
     compileSdk = 35
+
     defaultConfig {
         applicationId = "com.securevault"
         minSdk = 26
@@ -15,22 +17,42 @@ android {
         versionCode = 1
         versionName = "1.0"
     }
+
     buildTypes {
-        debug { isDebuggable = true }
+        debug {
+            isDebuggable = true
+            isMinifyEnabled = false  // ✅ Отключаем для debug, чтобы не было ошибок
+        }
         release {
             isMinifyEnabled = true
             isShrinkResources = true
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-    kotlinOptions { jvmTarget = "17" }
-    buildFeatures { compose = true }
-    packaging { resources { excludes += "/META-INF/{AL2.0,LGPL2.1}" } }
+
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+
+    buildFeatures {
+        compose = true
+    }
+
+    packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
+    }
 }
+
 dependencies {
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime)
@@ -50,7 +72,10 @@ dependencies {
     implementation(libs.room.ktx)
     ksp(libs.room.compiler)
     implementation(libs.biometric)
-    implementation(libs.security.crypto)
+    
+    // ✅ ИСПРАВЛЕНО: Прямая ссылка вместо libs.security.crypto
+    implementation("androidx.security:security-crypto:1.1.0-alpha06")
+    
     implementation(libs.coroutines.android)
     debugImplementation(libs.compose.ui.tooling)
 }
